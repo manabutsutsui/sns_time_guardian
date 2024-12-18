@@ -1,10 +1,10 @@
-const SNS_SITES = {
+export const SNS_SITES = {
     'youtube.com': {
         name: 'YouTube',
         defaultLimit: 60,
         icon: '🎥'
     },
-    'twitter.com': {
+    'x.com': {
         name: 'X (Twitter)',
         defaultLimit: 60,
         icon: '🐦'
@@ -26,5 +26,5 @@ const SNS_SITES = {
     }
 };
 
-const DAY_RESET_HOUR = 0;
-const WARNING_THRESHOLD = 5;
+export const DAY_RESET_HOUR = 0;
+export const WARNING_THRESHOLD = 5;

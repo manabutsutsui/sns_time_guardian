@@ -1,31 +1,5 @@
-// SNSサイトの設定
-const SNS_SITES = {
-    'youtube.com': {
-        name: 'YouTube',
-        defaultLimit: 70,
-        icon: '🎥'
-    },
-    'twitter.com': {
-        name: 'X (Twitter)',
-        defaultLimit: 60,
-        icon: '🐦'
-    },
-    'facebook.com': {
-        name: 'Facebook',
-        defaultLimit: 60,
-        icon: '👥'
-    },
-    'instagram.com': {
-        name: 'Instagram',
-        defaultLimit: 60,
-        icon: '📷'
-    },
-    'tiktok.com': {
-        name: 'TikTok',
-        defaultLimit: 60,
-        icon: '🎵'
-    }
-};
+// SNS_SITESの定義を削除し、config.jsからインポート
+import { SNS_SITES } from './js/config.js';
 
 let activeTab = {
     url: null,
@@ -50,6 +24,25 @@ async function initialize() {
         todayStats = data.todayStats || {};
     }
     console.log('Initialized with stats:', todayStats);
+
+    // 起動時のアクティブタブをチェック
+    try {
+        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+        if (tab) {
+            updateActiveTab(tab.url);
+        }
+    } catch (e) {
+        console.error('Error checking initial tab:', e);
+    }
+
+    // 定期的な保存を設定
+    setInterval(async () => {
+        if (activeTab.startTime) {
+            await saveTime();
+            // 継続して計測するため、startTimeを更新
+            activeTab.startTime = Date.now();
+        }
+    }, 60000); // 1分ごと
 }
 
 // タブのアクティブ状態の変更を監視
@@ -75,17 +68,33 @@ function updateActiveTab(url) {
     if (!url) return;
     
     try {
-        const domain = new URL(url).hostname;
-        const snsKey = Object.keys(SNS_SITES).find(key => domain.includes(key));
+        const urlObj = new URL(url);
+        const domain = urlObj.hostname.toLowerCase(); // ドメインを小文字に統一
+        console.log('Checking domain:', domain);
+
+        // ドメインチェックのロジックを改善
+        const snsKey = Object.keys(SNS_SITES).find(key => 
+            domain === key ||
+            domain === 'www.' + key ||
+            domain.endsWith('.' + key)
+        );
         
         if (snsKey) {
             console.log('SNS detected:', snsKey);
+            // 既に計測中の場合は一旦保存
+            if (activeTab.startTime) {
+                saveTime();
+            }
             activeTab = {
                 url: url,
                 startTime: Date.now(),
                 domain: snsKey
             };
+            console.log('Active tab updated:', activeTab); // デバッグログ追加
         } else {
+            if (activeTab.startTime) {
+                saveTime();
+            }
             activeTab = { url: null, startTime: null, domain: null };
         }
     } catch (e) {

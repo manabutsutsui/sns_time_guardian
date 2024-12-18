@@ -1,3 +1,5 @@
+import { SNS_SITES } from './js/config.js';
+
 document.addEventListener('DOMContentLoaded', async () => {
     await updateStats();
     await updateTimeSettings(); // 制限時間設定の表示を追加
@@ -9,34 +11,6 @@ async function updateStats() {
     const { todayStats, userLimits } = await chrome.storage.local.get(['todayStats', 'userLimits']);
     const stats = document.getElementById('stats');
     stats.innerHTML = '';
-
-    const SNS_SITES = {
-        'youtube.com': {
-            name: 'YouTube',
-            defaultLimit: 60,
-            icon: '🎥'
-        },
-        'twitter.com': {
-            name: 'X (Twitter)',
-            defaultLimit: 60,
-            icon: '🐦'
-        },
-        'facebook.com': {
-            name: 'Facebook',
-            defaultLimit: 60,
-            icon: '👥'
-        },
-        'instagram.com': {
-            name: 'Instagram',
-            defaultLimit: 60,
-            icon: '📷'
-        },
-        'tiktok.com': {
-            name: 'TikTok',
-            defaultLimit: 60,
-            icon: '🎵'
-        }
-    };
 
     Object.entries(SNS_SITES).forEach(([domain, site]) => {
         const seconds = (todayStats || {})[domain] || 0;
@@ -69,34 +43,6 @@ async function updateTimeSettings() {
     const { userLimits } = await chrome.storage.local.get(['userLimits']);
     const timeSettings = document.getElementById('timeSettings');
     timeSettings.innerHTML = '';
-
-    const SNS_SITES = {
-        'youtube.com': {
-            name: 'YouTube',
-            defaultLimit: 60,
-            icon: '🎥'
-        },
-        'twitter.com': {
-            name: 'X (Twitter)',
-            defaultLimit: 60,
-            icon: '🐦'
-        },
-        'facebook.com': {
-            name: 'Facebook',
-            defaultLimit: 60,
-            icon: '👥'
-        },
-        'instagram.com': {
-            name: 'Instagram',
-            defaultLimit: 60,
-            icon: '📷'
-        },
-        'tiktok.com': {
-            name: 'TikTok',
-            defaultLimit: 60,
-            icon: '🎵'
-        }
-    };
 
     Object.entries(SNS_SITES).forEach(([domain, site]) => {
         const currentLimit = (userLimits || {})[domain] || site.defaultLimit;
