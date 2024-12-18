@@ -1,0 +1,24 @@
+{
+    "manifest_version": 3,
+    "name": "SNS Time Guardian",
+    "version": "1.0",
+    "description": "SNSの使用時間を管理し、設定した制限時間を超えると通知してくれる拡張機能",
+    "permissions": [
+        "tabs",
+        "storage",
+        "webNavigation",
+        "notifications",
+        "alarms"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_popup": "popup.html"
+    },
+    "icons": {
+        "16": "icons/icon16.png",
+        "48": "icons/icon48.png",
+        "128": "icons/icon128.png"
+    }
+}

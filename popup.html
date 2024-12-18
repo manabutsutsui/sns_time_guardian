@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>SNS Time Guardian</title>
+    <link rel="stylesheet" href="styles/popup.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>SNS Time Guardian</h1>
+        <section>
+            <h2>今日の利用状況</h2>
+            <div id="stats"></div>
+        </section>
+        <section class="settings-section">
+            <h2>制限時間の設定</h2>
+            <div id="timeSettings" class="settings-container"></div>
+        </section>
+        <div class="actions">
+            <button id="resetStats" class="warning">統計リセット</button>
+            <button id="exportData" class="primary">データ出力</button>
+        </div>
+    </div>
+    <script src="popup.js"></script>
+</body>
+
+</html>
